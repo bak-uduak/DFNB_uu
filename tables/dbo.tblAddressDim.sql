@@ -1,26 +1,27 @@
-USE [DFNB2];
+USE [DFNB2]
 GO
 
-/****** Object:  Table [dbo].[tblAddressDim]    Script Date: 11/23/2020 5:18:07 PM ******/
-
-DROP TABLE [dbo].[tblAddressDim];
+/****** Object:  Table [dbo].[tblAddressDim]    Script Date: 12/1/2020 9:22:40 AM ******/
+DROP TABLE [dbo].[tblAddressDim]
 GO
 
-/****** Object:  Table [dbo].[tblAddressDim]    Script Date: 11/23/2020 5:18:07 PM ******/
+/****** Object:  Table [dbo].[tblAddressDim]    Script Date: 12/1/2020 9:22:40 AM ******/
+SET ANSI_NULLS ON
+GO
 
-SET ANSI_NULLS ON;
+SET QUOTED_IDENTIFIER ON
 GO
-SET QUOTED_IDENTIFIER ON;
+
+CREATE TABLE [dbo].[tblAddressDim](
+	[cust_add_id] [int] NOT NULL,
+	[cust_add_lat] [decimal](16, 12) NOT NULL,
+	[cust_add_lon] [decimal](16, 12) NOT NULL,
+	[cust_add_type] [char](1) NOT NULL,
+ CONSTRAINT [PK_tblAddressDim] PRIMARY KEY CLUSTERED 
+(
+	[cust_add_id] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+) ON [PRIMARY]
 GO
-CREATE TABLE [dbo].[tblAddressDim]
-([add_id]   [INT] NOT NULL, 
- [add_type] [VARCHAR](1) NOT NULL, 
- [add_lon]  [DECIMAL](16, 12) NOT NULL, 
- [add_lat]  [DECIMAL](16, 12) NOT NULL, 
- CONSTRAINT [PK_tblAddressDim] PRIMARY KEY CLUSTERED([add_id] ASC)
- WITH(PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
-)
-ON [PRIMARY];
-GO
-SELECT *
-FROM dbo.tblAddressDim TAD;
+
+

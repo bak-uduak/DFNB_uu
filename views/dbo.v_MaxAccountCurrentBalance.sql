@@ -1,13 +1,10 @@
 /*****************************************************************************************************************
-NAME:    LoadData
-PURPOSE: ETL process for Example data
+NAME:    dbo.v_MaxAccountCurrentBalance
+PURPOSE: Create the dbo.v_MaxAccountCurrentBalance view
 MODIFICATION LOG:
 Ver      Date        Author        Description
 -----   ----------   -----------   -------------------------------------------------------------------------------
-1.0     08/02/2019   UUDUAK  1. Built this table for LDS BC IT240
-1.1     10/27/2019   UUDUAK  1. Added fact table load for LDS BC IT243
-1.2     05/06/2020   UUDUAK  1. Added Team Name
-1.3     05/11/2020   UUDUAK  1. Added dynamic column for Team Name
+1.0     12/02/2020   UUDO       1. Built this table for LDS BC IT240
 RUNTIME: 
 Approx. 1 min
 NOTES:
@@ -18,29 +15,27 @@ of the code the rights of the Free Software Definition. All derivative work can 
 distributed under the same license terms.
  
 ******************************************************************************************************************/
-
 USE [DFNB2]
 GO
 
-/****** Object:  Table [dbo].[tblProductsDim]    Script Date: 11/27/2020 3:41:27 PM ******/
-DROP TABLE [dbo].[tblProductsDim]
+/****** Object:  View [dbo].[v_MaxAccountCurrentBalance]    Script Date: 12/9/2020 10:36:10 AM ******/
+DROP VIEW [dbo].[v_MaxAccountCurrentBalance]
 GO
 
-/****** Object:  Table [dbo].[tblProductsDim]    Script Date: 11/27/2020 3:41:27 PM ******/
+/****** Object:  View [dbo].[v_MaxAccountCurrentBalance]    Script Date: 12/9/2020 10:36:10 AM ******/
 SET ANSI_NULLS ON
 GO
 
 SET QUOTED_IDENTIFIER ON
 GO
 
-CREATE TABLE [dbo].[tblProductsDim](
-	[prod_id] [smallint] NOT NULL,
-	[prod_name] [nvarchar](50) NULL,
- CONSTRAINT [PK_tblProductsDim] PRIMARY KEY CLUSTERED 
-(
-	[prod_id] ASC
-)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
-) ON [PRIMARY]
+CREATE VIEW [dbo].[v_MaxAccountCurrentBalance] as
+SELECT af.as_of_date,  
+       MAX(af.cur_bal) AS max_bal
+FROM dbo.tblAccountFacts AS af
+WHERE (af.as_of_date) > '2017-12-31' AND 
+	  (af.cur_bal) > '50000'
+GROUP BY af.as_of_date;
 GO
 
 

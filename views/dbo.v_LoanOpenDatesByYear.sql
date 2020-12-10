@@ -1,13 +1,10 @@
 /*****************************************************************************************************************
-NAME:    LoadData
-PURPOSE: ETL process for Example data
+NAME:    dbo.v_LoanOpenDatesByYear
+PURPOSE: Create the dbo.v_CountTotalAccount view
 MODIFICATION LOG:
 Ver      Date        Author        Description
 -----   ----------   -----------   -------------------------------------------------------------------------------
-1.0     08/02/2019   UUDUAK  1. Built this table for LDS BC IT240
-1.1     10/27/2019   UUDUAK  1. Added fact table load for LDS BC IT243
-1.2     05/06/2020   UUDUAK  1. Added Team Name
-1.3     05/11/2020   UUDUAK  1. Added dynamic column for Team Name
+1.0     12/02/2020   UUDO       1. Built this table for LDS BC IT240
 RUNTIME: 
 Approx. 1 min
 NOTES:
@@ -21,26 +18,26 @@ distributed under the same license terms.
 
 USE [DFNB2]
 GO
-
-/****** Object:  Table [dbo].[tblProductsDim]    Script Date: 11/27/2020 3:41:27 PM ******/
-DROP TABLE [dbo].[tblProductsDim]
+/****** Object:  View [dbo].[v_LoanOpenDatesByYear]    Script Date: 12/9/2020 10:29:51 AM ******/
+DROP VIEW [dbo].[v_LoanOpenDatesByYear]
 GO
 
-/****** Object:  Table [dbo].[tblProductsDim]    Script Date: 11/27/2020 3:41:27 PM ******/
+/****** Object:  View [dbo].[v_LoanOpenDatesByYear]    Script Date: 12/9/2020 10:29:51 AM ******/
 SET ANSI_NULLS ON
 GO
 
 SET QUOTED_IDENTIFIER ON
 GO
 
-CREATE TABLE [dbo].[tblProductsDim](
-	[prod_id] [smallint] NOT NULL,
-	[prod_name] [nvarchar](50) NULL,
- CONSTRAINT [PK_tblProductsDim] PRIMARY KEY CLUSTERED 
-(
-	[prod_id] ASC
-)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
-) ON [PRIMARY]
+CREATE VIEW [dbo].[v_LoanOpenDatesByYear] AS 
+SELECT acd.acct_id, 
+       YEAR(acd.open_date) AS open_date_year, 
+       SUM(acd.loan_amt) AS _total_loan_amt
+FROM dbo.tblAccountsDim AS acd
+WHERE acd.open_date = '2018' 
+GROUP BY YEAR(acd.open_date), 
+         acd.loan_amt,
+         acd.acct_id
 GO
 
 

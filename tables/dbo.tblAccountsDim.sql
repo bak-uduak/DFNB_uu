@@ -1,11 +1,11 @@
 USE [DFNB2]
 GO
 
-/****** Object:  Table [dbo].[tblAccountsDim]    Script Date: 11/22/2020 5:51:26 PM ******/
+/****** Object:  Table [dbo].[tblAccountsDim]    Script Date: 12/1/2020 7:50:12 AM ******/
 DROP TABLE [dbo].[tblAccountsDim]
 GO
 
-/****** Object:  Table [dbo].[tblAccountsDim]    Script Date: 11/22/2020 5:51:26 PM ******/
+/****** Object:  Table [dbo].[tblAccountsDim]    Script Date: 12/1/2020 7:50:12 AM ******/
 SET ANSI_NULLS ON
 GO
 
@@ -15,7 +15,7 @@ GO
 CREATE TABLE [dbo].[tblAccountsDim](
 	[acct_id] [int] NOT NULL,
 	[prod_id] [smallint] NOT NULL,
-	[cust_id] [smallint] NOT NULL,
+	[pri_cust_id] [smallint] NOT NULL,
 	[branch_id] [smallint] NOT NULL,
 	[loan_amt] [decimal](20, 4) NOT NULL,
 	[open_date] [date] NOT NULL,

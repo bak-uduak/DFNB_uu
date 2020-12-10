@@ -1,12 +1,11 @@
---script header
 USE [DFNB2]
 GO
 
-/****** Object:  Table [dbo].[tblBranchDim]    Script Date: 11/27/2020 12:53:43 PM ******/
+/****** Object:  Table [dbo].[tblBranchDim]    Script Date: 12/1/2020 10:56:11 AM ******/
 DROP TABLE [dbo].[tblBranchDim]
 GO
 
-/****** Object:  Table [dbo].[tblBranchDim]    Script Date: 11/27/2020 12:53:43 PM ******/
+/****** Object:  Table [dbo].[tblBranchDim]    Script Date: 12/1/2020 10:56:11 AM ******/
 SET ANSI_NULLS ON
 GO
 
@@ -15,11 +14,11 @@ GO
 
 CREATE TABLE [dbo].[tblBranchDim](
 	[branch_id] [smallint] NOT NULL,
-	[acct_branch_desc] [varchar](100) NOT NULL,
-	[add_id] [int] NOT NULL,
-	[acct_branch_code] [varchar](5) NOT NULL,
-	[area_id] [int] NOT NULL,
+	[branch_code] [varchar](5) NOT NULL,
+	[branch_desc] [varchar](100) NOT NULL,
 	[region_id] [int] NOT NULL,
+	[area_id] [int] NOT NULL,
+	[branch_add_id] [int] NOT NULL,
  CONSTRAINT [PK_tblBranchDim] PRIMARY KEY CLUSTERED 
 (
 	[branch_id] ASC

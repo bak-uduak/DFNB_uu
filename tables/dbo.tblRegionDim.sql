@@ -1,12 +1,11 @@
---script header
 USE [DFNB2]
 GO
 
-/****** Object:  Table [dbo].[tblRegionDim]    Script Date: 11/27/2020 1:00:42 PM ******/
+/****** Object:  Table [dbo].[tblRegionDim]    Script Date: 12/1/2020 12:02:49 PM ******/
 DROP TABLE [dbo].[tblRegionDim]
 GO
 
-/****** Object:  Table [dbo].[tblRegionDim]    Script Date: 11/27/2020 1:00:42 PM ******/
+/****** Object:  Table [dbo].[tblRegionDim]    Script Date: 12/1/2020 12:02:49 PM ******/
 SET ANSI_NULLS ON
 GO
 
