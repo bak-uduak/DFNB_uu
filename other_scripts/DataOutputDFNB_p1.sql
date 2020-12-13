@@ -95,3 +95,127 @@ GROUP BY bd.branch_desc,
          acd.open_date
 ORDER BY acd.open_date,
         bd.branch_desc;
+
+  --(6) Branch Transactions
+
+  CREATE VIEW v_MaxTransactionAMountByBranch AS 
+SELECT  t.tran_type_desc,  
+       MAX(f.tran_amt) AS t_amt, 
+       COUNT(f.tran_fee_amt) AS t_fee_amt, 
+       b.branch_desc
+FROM dbo.tblTransactionsTypeDim AS t
+     JOIN dbo.tblTransactionFacts AS f ON f.tran_type_id = t.tran_type_id
+     JOIN dbo.tblBranchDim AS b ON b.branch_id = f.branch_id
+WHERE f.tran_fee_amt > '1000'
+      AND f.tran_amt > '500000'
+GROUP BY t.tran_type_id, 
+         t.tran_type_code, 
+         t.tran_type_desc,
+		 b.branch_desc,
+         t.tran_fee_prct;
+
+--(7) Volume of Transation
+
+CREATE VIEW v_VolumeOfTransactionByBranch AS 
+SELECT MAX(a.loan_amt) AS laon_amt, 
+       a.open_date, 
+       COUNT(a.pri_cust_id) AS pri_cust, 
+       b.branch_desc,
+	   COUNT(t.tran_amt) AS tran_amt
+FROM dbo.tblAccountsDim AS a
+     JOIN dbo.tblBranchDim AS b ON a.branch_id = b.branch_id
+     JOIN dbo.tbltransactionFacts AS t ON t.branch_id = b.branch_id
+WHERE a.open_date = '2018-12-31'
+      OR a.open_date = '2019-05-31'
+GROUP BY a.open_date, 
+         b.branch_desc
+ORDER BY b.branch_desc;
+
+--(8) Transaction Frequency
+
+CREATE VIEW v_TransactionFrequency AS 
+SELECT f.branch_id,
+	   t.tran_type_desc,  
+       COUNT(f.tran_time) AS tran_time, 
+       f.tran_date 
+FROM dbo.tblTransactionsTypeDim AS t
+     JOIN dbo.tblTransactionFacts AS f ON f.tran_type_id = t.tran_type_id
+ WHERE f.tran_date > '2017-12-31'
+GROUP BY  t.tran_type_desc,
+		  f.tran_date,
+		  f.branch_id
+ORDER BY f.branch_id,
+	     tran_date;
+
+ --(9)Transaction Type 
+ 
+ CREATE VIEW v_transactionTypeByBranch AS 
+SELECT t.tran_type_id, 
+       COUNT(t.tran_type_desc) AS count_tran_type,
+	   t.tran_type_desc,
+       b.branch_desc
+FROM dbo.tbltransactionsTypeDim AS t
+     JOIN dbo.tblTransactionFacts AS f ON t.tran_type_id = f.tran_type_id
+     JOIN dbo.tblBranchDim AS b ON b.branch_id = f.branch_id
+GROUP BY t.tran_type_id,
+		 t.tran_type_desc,
+		 b.branch_desc;
+
+--(10)Transaction Profit
+
+CREATE VIEW v_TransactionProfitByBranch AS 
+SELECT (f.tran_amt * f.tran_fee_amt/100) AS profit,         
+       t.tran_type_desc, 
+       b.branch_id, 
+       b.branch_desc 
+FROM dbo.tblTransactionstypeDim AS t
+     JOIN dbo.tblTransactionFacts AS f ON t.tran_type_id = f.tran_type_id
+     JOIN dbo.tblBranchDim AS b ON f.branch_id = b.branch_id
+WHERE (f.tran_amt * f.tran_fee_amt/100) > 1
+GROUP BY t.tran_type_desc,
+		 b.branch_id,
+		 f.tran_fee_amt,
+		 b.branch_desc,
+		 f.tran_amt;
+ORDER BY b.branch_id;
+
+--(11) Transaction Amounts and Fees
+
+CREATE VIEW v_TransactionAmountAndFees AS 
+SELECT --t.tran_type_code, 
+       t.tran_type_desc, 
+       SUM(f.tran_amt *t.tran_fee_prct/100) AS fee_ratio, 
+       SUM(f.tran_amt) AS tran_amt, 
+       f.tran_fee_amt,
+	   f.branch_id
+FROM dbo.tblTransactionsTypeDim AS t
+     JOIN dbo.tblTransactionFacts AS f ON t.tran_type_id = f.tran_type_id
+GROUP BY --t.tran_type_code,
+		 f.tran_fee_amt,
+		 f.branch_id,
+         t.tran_type_desc
+HAVING SUM(f.tran_amt *t.tran_fee_prct/100) > 1
+ORDER BY f.branch_id;
+
+--(12) Customers Branch Transactions
+
+CREATE VIEW v_CustomersBranchTransactions AS 
+SELECT TOP (50) c.first_name, 
+       c.last_name, 
+       --c.cust_since_date, 
+       c.gender, 
+       MAX(f.tran_amt) AS max_tran_amt, 
+       b.branch_desc, 
+       t.tran_type_desc
+FROM dbo.tblCustomersDim AS c
+     JOIN dbo.tblBranchDim AS b ON b.branch_id = c.branch_id
+     JOIN dbo.tblTransactionFacts AS f ON f.branch_id = b.branch_id
+     JOIN dbo.tblTransactionsTypeDim AS t ON t.tran_type_id = f.tran_type_id
+GROUP BY c.first_name, 
+       c.last_name, 
+       --c.cust_since_date,
+       c.gender,
+	   --f.tran_amt,
+	   b.branch_desc, 
+       t.tran_type_desc
+HAVING MAX(f.tran_amt) > '1000000';

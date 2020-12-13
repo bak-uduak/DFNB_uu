@@ -257,5 +257,83 @@ CREATE TABLE [dbo].[tblRegionDim](
 ) ON [PRIMARY]
 GO
 
+USE [DFNB2]
+GO
+
+ALTER TABLE [dbo].[tblTransactionFacts] DROP CONSTRAINT [FK_tblTransactionFacts_tblTransactionsTypeDim]
+GO
+
+ALTER TABLE [dbo].[tblTransactionFacts] DROP CONSTRAINT [FK_tblTransactionFacts_tblBranchDim]
+GO
+
+/****** Object:  Table [dbo].[tblTransactionFacts]    Script Date: 12/12/2020 9:51:53 AM ******/
+DROP TABLE [dbo].[tblTransactionFacts]
+GO
+
+/****** Object:  Table [dbo].[tblTransactionFacts]    Script Date: 12/12/2020 9:51:53 AM ******/
+SET ANSI_NULLS ON
+GO
+
+SET QUOTED_IDENTIFIER ON
+GO
+
+CREATE TABLE [dbo].[tblTransactionFacts](
+	[tran_facts_id] [int] IDENTITY(1,1) NOT NULL,
+	[branch_id] [smallint] NOT NULL,
+	[acct_id] [int] NOT NULL,
+	[tran_date] [date] NOT NULL,
+	[tran_time] [time](7) NOT NULL,
+	[tran_type_id] [smallint] NOT NULL,
+	[tran_amt] [int] NOT NULL,
+	[tran_fee_amt] [decimal](15, 3) NOT NULL,
+ CONSTRAINT [PK__tblTrans__C0382323F44A6630] PRIMARY KEY CLUSTERED 
+(
+	[tran_facts_id] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+
+ALTER TABLE [dbo].[tblTransactionFacts]  WITH CHECK ADD  CONSTRAINT [FK_tblTransactionFacts_tblBranchDim] FOREIGN KEY([branch_id])
+REFERENCES [dbo].[tblBranchDim] ([branch_id])
+GO
+
+ALTER TABLE [dbo].[tblTransactionFacts] CHECK CONSTRAINT [FK_tblTransactionFacts_tblBranchDim]
+GO
+
+ALTER TABLE [dbo].[tblTransactionFacts]  WITH CHECK ADD  CONSTRAINT [FK_tblTransactionFacts_tblTransactionsTypeDim] FOREIGN KEY([tran_type_id])
+REFERENCES [dbo].[tblTransactionsTypeDim] ([tran_type_id])
+GO
+
+ALTER TABLE [dbo].[tblTransactionFacts] CHECK CONSTRAINT [FK_tblTransactionFacts_tblTransactionsTypeDim]
+GO
+
+USE [DFNB2]
+GO
+
+/****** Object:  Table [dbo].[tblTransactionsTypeDim]    Script Date: 12/12/2020 9:52:52 AM ******/
+DROP TABLE [dbo].[tblTransactionsTypeDim]
+GO
+
+/****** Object:  Table [dbo].[tblTransactionsTypeDim]    Script Date: 12/12/2020 9:52:52 AM ******/
+SET ANSI_NULLS ON
+GO
+
+SET QUOTED_IDENTIFIER ON
+GO
+
+CREATE TABLE [dbo].[tblTransactionsTypeDim](
+	[tran_type_id] [smallint] NOT NULL,
+	[tran_type_code] [varchar](5) NOT NULL,
+	[tran_type_desc] [varchar](100) NOT NULL,
+	[tran_fee_prct] [decimal](4, 3) NOT NULL,
+	[cur_cust_req_ind] [varchar](1) NOT NULL,
+ CONSTRAINT [PK_tblTransactionsTypeDim] PRIMARY KEY CLUSTERED 
+(
+	[tran_type_id] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+
+
 
 

@@ -127,3 +127,30 @@ INSERT INTO dbo.tblRegionDim
        SELECT DISTINCT 
               acct_region_id AS region_id
        FROM dbo.stg_p1;
+
+ -- (11) Load dbo.tblTransactionFacts
+
+ TRUNCATE TABLE dbo.tblTransactionFacts;
+INSERT INTO dbo.tblTransactionFacts
+       SELECT DISTINCT 
+       --tran_facts_id - int - column value is auto-generated
+              branch_id, 
+              acct_id, 
+              tran_date, 
+              tran_time, 
+              tran_type_id, 
+              tran_amt, 
+              tran_fee_amt
+       FROM stg_p2;
+
+  -- (12) Load dbo.tblTransactionsTypeDim
+
+  TRUNCATE TABLE dbo.tblTransactionsTypeDim;
+  INSERT INTO dbo.tblTransactionsTypeDim
+       SELECT DISTINCT 
+              tran_type_id, 
+              tran_type_code, 
+              tran_type_desc, 
+              tran_fee_prct, 
+              cur_cust_req_ind
+       FROM stg_p2;
