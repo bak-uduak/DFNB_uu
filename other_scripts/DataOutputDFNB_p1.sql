@@ -219,3 +219,29 @@ GROUP BY c.first_name,
 	   b.branch_desc, 
        t.tran_type_desc
 HAVING MAX(f.tran_amt) > '1000000';
+
+--(13) Branch Future Performance
+
+CREATE VIEW [dbo].[v_FuturePerformanceByBranch] AS 
+SELECT(a.branch_id) AS branch_id, 
+      (b.branch_desc) AS branch_name, 
+      YEAR(a.open_date) AS Year, 
+      SUM(a.loan_amt) AS total_loan_amount
+FROM dbo.tblAccountsDim AS a
+     JOIN dbo.tblBranchDim AS b ON a.branch_id = b.branch_id
+WHERE YEAR(a.open_date) IN(2017, 2018, 2019)
+GROUP BY a.branch_id, 
+         b.branch_desc, 
+         YEAR(a.open_date);
+
+--(14) Area Future Performance
+
+CREATE VIEW [dbo].[v_FuturePerformanceByArea] AS (
+SELECT b.area_id AS area_id, 
+       YEAR(a.open_date) AS year_date, 
+       SUM(a.loan_amt) AS total_loan_amt
+FROM dbo.tblAccountsDim AS a
+     JOIN dbo.tblBranchDim AS b ON a.branch_id = b.branch_id
+WHERE YEAR(a.open_date) IN(2017, 2018, 2019)
+GROUP BY b.area_id, 
+         YEAR(a.open_date));
